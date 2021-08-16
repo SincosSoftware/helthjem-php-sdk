@@ -1,0 +1,40 @@
+{
+    "version": "1.0",
+    "name": "sincos/helthjem-php-sdk",
+    "type": "package",
+    "keywords": [
+        "Helthjem",
+        "SDK",
+        "PHP",
+        "24Nettbutikk"
+    ],
+    "description": "Helthjem PHP SDK",
+    "license": "MIT",
+    "homepage": "https://24nettbutikk.no",
+    "authors": [
+        {
+            "name": "Ola Valø Pettersen",
+            "role": "Developer",
+            "homepage": "https://24nettbutikk.no",
+            "email": "ola@24nettbutikk.no"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "HelthjemSDK\\": "src/",
+            "Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "5.*",
+        "ext-json": "*",
+        "nesbot/carbon": "~1.19",
+        "guzzlehttp/guzzle": "6.*",
+        "illuminate/support": "5.*|6.*|7.*|8.*|9.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
