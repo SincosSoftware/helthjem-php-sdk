@@ -2,16 +2,15 @@
 
 namespace HelthjemSDK\Shared;
 
-use HelthjemSDK\NearbyServicepoint\NearbyServicepointRequest;
-use HelthjemSDK\NearbyServicepoint\NearbyServicepointResponse;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-
 use HelthjemSDK\Shared\Interfaces\Request;
 use HelthjemSDK\Authentication\AuthTokenResponse;
 use HelthjemSDK\Authentication\AuthTokenRequest;
 use HelthjemSDK\SingleAddressCheck\SingleAddressCheckRequest;
 use HelthjemSDK\SingleAddressCheck\SingleAddressCheckResponse;
+use HelthjemSDK\NearbyServicepoint\NearbyServicepointRequest;
+use HelthjemSDK\NearbyServicepoint\NearbyServicepointResponse;
 use HelthjemSDK\Shared\Exceptions\HelthjemApiRequestException;
 use HelthjemSDK\Shared\Exceptions\HelthjemApiResponseException;
 
@@ -19,8 +18,6 @@ class ResponseHandler
 {
     private $request;
     private $response;
-
-    const HTTP_OK = 200;
     /**
      * @var Request
      */
@@ -38,7 +35,7 @@ class ResponseHandler
         $requestType = get_class($request);
         $responseBody = json_decode((string) $response->getBody(), true);
 
-        if ($response->getStatusCode() !== static::HTTP_OK) {
+        if ($response->getStatusCode() !== 200) {
             throw new HelthjemApiRequestException('Api request ' . $requestType . ' failed with status ' . $response->getStatusCode(), 424);
         }
 
@@ -58,9 +55,9 @@ class ResponseHandler
     }
 
     /**
-     * @param Request $request
+     * @param RequestInterface $request
      * @param ResponseInterface $response
-     * @return AuthTokenResponse|SingleAddressCheckResponse
+     * @return AuthTokenResponse|SingleAddressCheckResponse|NearbyServicepointResponse
      * @throws HelthjemApiRequestException
      * @throws HelthjemApiResponseException
      */

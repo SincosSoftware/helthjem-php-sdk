@@ -3,7 +3,7 @@
 namespace HelthjemSDK\NearbyServicepoint;
 
 use HelthjemSDK\Authentication\AuthTokenResponse;
-use HelthjemSDK\NearbyServicepoint\ValueObjects\Address;
+use HelthjemSDK\Shared\Interfaces\Address;
 use HelthjemSDK\Shared\BaseRequest;
 use HelthjemSDK\Shared\Exceptions\HelthjemAuthenticationException;
 use HelthjemSDK\Shared\Interfaces\Configuration;
@@ -30,10 +30,15 @@ class NearbyServicepointRequest extends BaseRequest
         $this->uri = $this->getBaseUri($configuration->isProduction()) . 'freightcoverage/v-1/servicepoints';
         $this->headers = array_merge($this->headers, $token->toHeader());
 
-        $this->body = json_encode(array_merge([
+        $this->body = json_encode([
             'shopId' => $configuration->getShopId(),
             'transportSolutionId' => $configuration->getTransportSolutionId(),
-        ], $address->toArray()));
+            'countryCode' => $address->getCountryCode(),
+            'postalName' => $address->getCity(),
+            'zipCode' => $address->getZipCode(),
+            'streetAddress' => $address->getStreetAddress(),
+            'coAddress' => $address->getCareOf()
+        ]);
 
         return parent::__construct(
             $this->method,

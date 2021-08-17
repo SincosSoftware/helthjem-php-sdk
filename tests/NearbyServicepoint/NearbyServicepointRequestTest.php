@@ -5,7 +5,7 @@ namespace Tests\NearbyServicepoint;
 use Carbon\Carbon;
 use HelthjemSDK\Authentication\AuthTokenResponse;
 use HelthjemSDK\NearbyServicepoint\NearbyServicepointRequest;
-use HelthjemSDK\NearbyServicepoint\ValueObjects\Address;
+use HelthjemSDK\Shared\Address;
 use HelthjemSDK\Shared\Interfaces\Configuration;
 use PHPUnit\Framework\TestCase;
 
@@ -13,14 +13,25 @@ final class NearbyServicepointRequestTest extends TestCase
 {
     private $configuration;
     private $authTokenResponse;
+    private $address;
 
     public function __construct($name = null, array $data = array(), $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
         $this->createConfiguration();
+        $this->createAddress();
         $this->createAuthTokenResponse();
     }
 
+    private function createAddress()
+    {
+        $this->address = $this->getMock(Address::class);
+        $this->address->method('getCountryCode')->willReturn('NO');
+        $this->address->method('getCity')->willReturn('Oslo');
+        $this->address->method('getZipCode')->willReturn('0468');
+        $this->address->method('getStreetAddress')->willReturn('Moldegata 5');
+        $this->address->method('getCareOf')->willReturn(null);
+    }
 
     private function createConfiguration()
     {
@@ -39,9 +50,8 @@ final class NearbyServicepointRequestTest extends TestCase
 
     public function testCorrectHeadersAreSet()
     {
-        $address = $this->getMock(Address::class);
-        $address->method('toArray')->willReturn([]);
-        $request = new NearbyServicepointRequest($this->authTokenResponse, $this->configuration, $address);
+
+        $request = new NearbyServicepointRequest($this->authTokenResponse, $this->configuration, $this->address);
 
         $this->assertArrayHasKey('Content-Type', $request->getHeaders());
         $this->assertArrayHasKey('Authorization', $request->getHeaders());
@@ -49,42 +59,16 @@ final class NearbyServicepointRequestTest extends TestCase
 
     public function testCorrectHttpMethodIsSet()
     {
-        $address = $this->getMock(Address::class);
-        $address->method('toArray')->willReturn([]);
-        $request = new NearbyServicepointRequest($this->authTokenResponse, $this->configuration, $address);
-
+        $request = new NearbyServicepointRequest($this->authTokenResponse, $this->configuration, $this->address);
         $this->assertEquals('POST', $request->getMethod());
     }
 
     public function testIsUsingCorrectUri()
     {
-        $address = $this->getMock(Address::class);
-        $address->method('toArray')->willReturn([]);
-        $request = new NearbyServicepointRequest($this->authTokenResponse, $this->configuration, $address);
+
+        $request = new NearbyServicepointRequest($this->authTokenResponse, $this->configuration, $this->address);
 
         $this->assertEquals('/ws/json/freightcoverage/v-1/servicepoints', $request->getUri()->getPath());
         $this->assertEquals('staging-ws.di.no', $request->getUri()->getHost());
-    }
-
-    public function testRequestDataIsSet()
-    {
-        $address = $this->getMock(Address::class);
-        $address->method('toArray')->willReturn([
-            'someAddressPropertyName' => 'someAddressPropertyValue'
-        ]);
-
-        $request = new NearbyServicepointRequest($this->authTokenResponse, $this->configuration, $address);
-        $requestData = json_decode((string) $request->getBody(), true);
-        $addressData = $address->toArray();
-
-        foreach ($addressData as $key => $data) {
-            $this->assertArrayHasKey($key, $requestData);
-            $this->assertEquals($data, $requestData[$key]);
-        }
-
-        $this->assertArrayHasKey('shopId', $requestData);
-        $this->assertEquals(1, $requestData['shopId']);
-        $this->assertArrayhasKey('transportSolutionId', $requestData);
-        $this->assertEquals(2, $requestData['transportSolutionId']);
     }
 }

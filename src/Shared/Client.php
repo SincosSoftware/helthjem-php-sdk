@@ -4,7 +4,9 @@ namespace HelthjemSDK\Shared;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
+use HelthjemSDK\Authentication\AuthTokenResponse;
 use HelthjemSDK\Shared\Exceptions\HelthjemApiRequestException;
+use HelthjemSDK\SingleAddressCheck\SingleAddressCheckResponse;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -24,9 +26,8 @@ class Client
 
     /**
      * @param RequestInterface $request
-     * @return mixed
-     * @throws Exceptions\HelthjemApiRequestException
      * @throws Exceptions\HelthjemApiResponseException
+     * @throws HelthjemApiRequestException
      */
     public function send(RequestInterface $request)
     {

@@ -11,11 +11,11 @@ class AuthTokenResponse
     use NonNullValueObject;
 
     private $token;
-    private $validUntil;
+    public $validUntil;
 
-    public function __construct($authToken, Carbon $validUntil)
+    public function __construct($token, Carbon $validUntil)
     {
-        $this->token = $authToken;
+        $this->token = $token;
         $this->validUntil = $validUntil;
     }
 
