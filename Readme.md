@@ -4,13 +4,15 @@ A barebones php implementation of some of Helthjems's API's.
 
 Usage example: 
 
-    $client = new Client(
+    $configuration = new Configuration();
+    
+    $requestHandler = new RequestHandler(
         new GuzzleClient([GuzzleHttp\RequestOptions::CONNECT_TIMEOUT => 2.0])
     );
-        
-    $configuration = new Configuration();
-    $authTokenRequest = new AuthTokenRequest($configuration);
-    $token = $client->send($authTokenRequest);
+    
+    $token = $requestHandler->send(
+        new AuthTokenRequest($configuration)
+    );
 
     $address = Address::fromArray([
         "countryCode" => 'NO',
@@ -22,7 +24,7 @@ Usage example:
     $singleAddressCheckRequest = new SingleAddressCheckRequest($token, $configuration, $address);
     $nearbyServicePointRequest = new NearbyServicepointRequest($token, $configuration, $address);
 
-    $singleAddressCheck = $client->send($singleAddressCheckRequest);
-    $nearbyServicePoint = $client->send($nearbyServicePointRequest);
+    $singleAddressCheck = $requestHandler->send($singleAddressCheckRequest);
+    $nearbyServicePoint = $requestHandler->send($nearbyServicePointRequest);
     
 Created by 24nettbutikk.no

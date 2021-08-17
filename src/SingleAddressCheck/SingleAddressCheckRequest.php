@@ -4,6 +4,7 @@ namespace HelthjemSDK\SingleAddressCheck;
 
 use HelthjemSDK\Authentication\AuthTokenResponse;
 use HelthjemSDK\Shared\BaseRequest;
+use HelthjemSDK\Shared\Exceptions\HelthjemAuthenticationException;
 use HelthjemSDK\Shared\Interfaces\Configuration;
 use HelthjemSDK\Shared\Interfaces\Address;
 
@@ -20,7 +21,7 @@ class SingleAddressCheckRequest extends BaseRequest
      * @param AuthTokenResponse $token
      * @param Configuration $configuration
      * @param $address
-     * @throws \HelthjemSDK\Shared\Exceptions\HelthjemAuthenticationException
+     * @throws HelthjemAuthenticationException
      */
     public function __construct(AuthTokenResponse $token, Configuration $configuration, Address $address)
     {

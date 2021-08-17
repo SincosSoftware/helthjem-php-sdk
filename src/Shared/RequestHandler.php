@@ -5,15 +5,13 @@ namespace HelthjemSDK\Shared;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use HelthjemSDK\Authentication\AuthTokenResponse;
+use HelthjemSDK\NearbyServicepoint\NearbyServicepointResponse;
 use HelthjemSDK\Shared\Exceptions\HelthjemApiRequestException;
 use HelthjemSDK\SingleAddressCheck\SingleAddressCheckResponse;
 use Psr\Http\Message\RequestInterface;
 
-/**
- * Class Client
- * @package HelthjemSDK\Shared
- */
-class Client
+
+class RequestHandler
 {
     protected $client;
     protected $requestType;
@@ -26,6 +24,7 @@ class Client
 
     /**
      * @param RequestInterface $request
+     * @return AuthTokenResponse|NearbyServicepointResponse|SingleAddressCheckResponse
      * @throws Exceptions\HelthjemApiResponseException
      * @throws HelthjemApiRequestException
      */
