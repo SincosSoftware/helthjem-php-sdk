@@ -36,7 +36,7 @@ class ResponseHandler
         $responseBody = json_decode((string) $response->getBody(), true);
 
         if ($response->getStatusCode() !== 200) {
-            throw new HelthjemApiRequestException('Api request ' . $requestType . ' failed with status ' . $response->getStatusCode(), 424);
+            throw new HelthjemApiRequestException('Api request ' . $requestType . ' failed with status ' . $response->getStatusCode(), 503);
         }
 
         switch ($requestType) {
