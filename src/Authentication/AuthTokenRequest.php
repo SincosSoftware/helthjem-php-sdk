@@ -2,12 +2,12 @@
 
 namespace HelthjemSDK\Authentication;
 
+use HelthjemSDK\Shared\BaseRequest;
 use HelthjemSDK\Shared\Exceptions\HelthjemApiRequestException;
 use HelthjemSDK\Shared\Interfaces\Configuration;
-use GuzzleHttp\Psr7\Request as GuzzleRequest;
 use Carbon\Carbon;
 
-class AuthTokenRequest extends GuzzleRequest
+class AuthTokenRequest extends BaseRequest
 {
     protected $method = 'POST';
     protected $uri;
@@ -30,7 +30,7 @@ class AuthTokenRequest extends GuzzleRequest
         }
 
         $this->validUntil = Carbon::now()->addMinutes($lifeTimeInMinutes);
-        $this->uri = $configuration->getBaseUri() . 'auth/v-3/login/'. $lifeTimeInMinutes;
+        $this->uri = $this->getBaseUri($configuration->isProduction()) . 'auth/v-3/login/'. $lifeTimeInMinutes;
 
         $this->body = json_encode([
             'username' => $configuration->getUserName(),

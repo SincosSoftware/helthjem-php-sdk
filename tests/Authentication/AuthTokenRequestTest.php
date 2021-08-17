@@ -21,7 +21,6 @@ final class AuthTokenRequestTest extends TestCase
         $this->configuration->method('isProduction')->willReturn(false);
         $this->configuration->method('getShopId')->willReturn(1);
         $this->configuration->method('getTransportSolutionId')->willReturn(1);
-        $this->configuration->method('getBaseUri')->willReturn('https://test.test/');
     }
 
     public function testThrowsExceptionIfLifetimeIsTooLong()
@@ -52,7 +51,7 @@ final class AuthTokenRequestTest extends TestCase
     public function testUsesCorrectUri()
     {
         $request = new AuthTokenRequest($this->configuration, '1337');
-        $this->assertAttributeEquals('https://test.test/auth/v-3/login/1337', 'uri', $request);
+        $this->assertAttributeEquals('https://staging-ws.di.no/ws/json/auth/v-3/login/1337', 'uri', $request);
     }
 
 

@@ -9,5 +9,4 @@ interface Configuration
     public function isProduction();
     public function getShopId();
     public function getTransportSolutionId();
-    public function getBaseUri();
 }

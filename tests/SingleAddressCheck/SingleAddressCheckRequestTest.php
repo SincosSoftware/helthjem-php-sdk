@@ -29,8 +29,7 @@ final class SingleAddressCheckRequestTest extends TestCase
         $this->configuration->method('getPassword')->willReturn('test');
         $this->configuration->method('isProduction')->willReturn(false);
         $this->configuration->method('getShopId')->willReturn(1);
-        $this->configuration->method('getTransportSolutionId')->willReturn(2);
-        $this->configuration->method('getBaseUri')->willReturn('https://test.test/');
+        $this->configuration->method('getTransportSolutionId')->willReturn(1);
     }
 
     private function createAuthTokenResponse()
@@ -63,8 +62,8 @@ final class SingleAddressCheckRequestTest extends TestCase
         $address->method('toArray')->willReturn([]);
         $request = new NearbyServicepointRequest($this->authTokenResponse, $this->configuration, $address);
 
-        $this->assertEquals('/freightcoverage/v-1/servicepoints', $request->getUri()->getPath());
-        $this->assertEquals('test.test', $request->getUri()->getHost());
+        $this->assertEquals('/ws/json/freightcoverage/v-1/servicepoints', $request->getUri()->getPath());
+        $this->assertEquals('staging-ws.di.no', $request->getUri()->getHost());
     }
 
     public function testRequestDataIsSet()
@@ -86,6 +85,6 @@ final class SingleAddressCheckRequestTest extends TestCase
         $this->assertArrayHasKey('shopId', $requestData);
         $this->assertEquals(1, $requestData['shopId']);
         $this->assertArrayhasKey('transportSolutionId', $requestData);
-        $this->assertEquals(2, $requestData['transportSolutionId']);
+        $this->assertEquals(1, $requestData['transportSolutionId']);
     }
 }
