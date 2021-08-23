@@ -11,7 +11,7 @@ Supported endpoints:
 Usage example: 
 
     $client = new HelthjemSDK\Shared\RequestHandler(
-        new Client([GuzzleHttp\RequestOptions::CONNECT_TIMEOUT => 1.0])
+        new GuzzleHttp\Client([GuzzleHttp\RequestOptions::CONNECT_TIMEOUT => 1.0])
     );
 
     // some implementation of HelthjemSDK\Shared\Interfaces\Configuration
