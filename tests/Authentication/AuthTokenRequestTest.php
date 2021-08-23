@@ -3,8 +3,8 @@
 namespace Tests\Authentication;
 
 use Carbon\Carbon;
+use UnexpectedValueException;
 use HelthjemSDK\Authentication\AuthTokenRequest;
-use HelthjemSDK\Shared\Exceptions\HelthjemApiRequestException;
 use HelthjemSDK\Shared\Interfaces\Configuration;
 use PHPUnit\Framework\TestCase;
 
@@ -25,19 +25,19 @@ final class AuthTokenRequestTest extends TestCase
 
     public function testThrowsExceptionIfLifetimeIsTooLong()
     {
-        $this->setExpectedException(HelthjemApiRequestException::class);
+        $this->setExpectedException(UnexpectedValueException::class);
         new AuthTokenRequest($this->configuration, 1500);
     }
 
     public function testThrowsExceptionIfLifetimeIsZero()
     {
-        $this->setExpectedException(HelthjemApiRequestException::class);
+        $this->setExpectedException(UnexpectedValueException::class);
         new AuthTokenRequest($this->configuration, 0);
     }
 
     public function testThrowsExceptionIfLifetimeIsNonNumeric()
     {
-        $this->setExpectedException(HelthjemApiRequestException::class);
+        $this->setExpectedException(UnexpectedValueException::class);
         new AuthTokenRequest($this->configuration, 'asd');
     }
 
@@ -45,7 +45,7 @@ final class AuthTokenRequestTest extends TestCase
     {
         Carbon::setTestNow(Carbon::create(2000, 1, 1, 0));
         $request = new AuthTokenRequest($this->configuration, '1440');
-        $this->assertEquals(Carbon::create(2000, 1, 1, 0)->addMinutes(1440), $request->validUntil);
+        $this->assertEquals(Carbon::create(2000, 1, 1, 0)->addMinutes(1440), $request->getValidUntil());
     }
 
     public function testUsesCorrectUri()

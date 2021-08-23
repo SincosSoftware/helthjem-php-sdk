@@ -2,21 +2,19 @@
 
 namespace HelthjemSDK\Shared;
 
-use Psr\Http\Message\RequestInterface;
+use Exception;
 use Psr\Http\Message\ResponseInterface;
 use HelthjemSDK\Shared\Interfaces\Request;
-use HelthjemSDK\Authentication\AuthTokenResponse;
+use HelthjemSDK\Authentication\AuthToken;
 use HelthjemSDK\Authentication\AuthTokenRequest;
 use HelthjemSDK\SingleAddressCheck\SingleAddressCheckRequest;
 use HelthjemSDK\SingleAddressCheck\SingleAddressCheckResponse;
 use HelthjemSDK\NearbyServicepoint\NearbyServicepointRequest;
 use HelthjemSDK\NearbyServicepoint\NearbyServicepointResponse;
-use HelthjemSDK\Shared\Exceptions\HelthjemApiRequestException;
 use HelthjemSDK\Shared\Exceptions\HelthjemApiResponseException;
 
 class ResponseHandler
 {
-    private $request;
     private $response;
     /**
      * @var Request
@@ -24,24 +22,21 @@ class ResponseHandler
 
     /**
      * ResponseHandler constructor.
-     * @param RequestInterface $request
+     * @param BaseRequest $request
      * @param ResponseInterface $response
-     * @throws HelthjemApiRequestException
      * @throws HelthjemApiResponseException
      */
-    private function __construct(RequestInterface $request, ResponseInterface $response)
+    private function __construct(BaseRequest $request, ResponseInterface $response)
     {
-        $this->request = $request;
-        $requestType = get_class($request);
-        $responseBody = json_decode((string) $response->getBody(), true);
-
-        if ($response->getStatusCode() !== 200) {
-            throw new HelthjemApiRequestException('Api request ' . $requestType . ' failed with status ' . $response->getStatusCode(), 503);
+        try {
+            $responseBody = json_decode((string) $response->getBody(), true);
+        } catch (Exception $exception) {
+            throw new HelthjemApiResponseException('Unexpected helthjemApi exception response: ' . get_class($request), 500, $exception);
         }
 
-        switch ($requestType) {
+        switch (get_class($request)) {
             case AuthTokenRequest::class:
-                $this->response = new AuthTokenResponse($responseBody['token'], $request->validUntil);
+                $this->response = new AuthToken($responseBody['token'], $request->getValidUntil);
                 break;
             case SingleAddressCheckRequest::class:
                 $this->response = new SingleAddressCheckResponse($responseBody);
@@ -50,18 +45,17 @@ class ResponseHandler
                 $this->response = new NearbyServicepointResponse($responseBody);
                 break;
             default:
-                throw new HelthjemApiResponseException('Unhandled helthjemApi response: ' . $requestType);
+                throw new HelthjemApiResponseException('Unhandled helthjemApi response: ' . get_class($request));
         }
     }
 
     /**
-     * @param RequestInterface $request
+     * @param BaseRequest $request
      * @param ResponseInterface $response
-     * @return AuthTokenResponse|SingleAddressCheckResponse|NearbyServicepointResponse
-     * @throws HelthjemApiRequestException
+     * @return AuthToken|SingleAddressCheckResponse|NearbyServicepointResponse
      * @throws HelthjemApiResponseException
      */
-    public static function handle(RequestInterface $request, ResponseInterface $response)
+    public static function handle(BaseRequest $request, ResponseInterface $response)
     {
         $handler = new static($request, $response);
         return $handler->getResponse();

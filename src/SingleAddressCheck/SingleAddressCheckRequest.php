@@ -2,7 +2,7 @@
 
 namespace HelthjemSDK\SingleAddressCheck;
 
-use HelthjemSDK\Authentication\AuthTokenResponse;
+use HelthjemSDK\Authentication\AuthToken;
 use HelthjemSDK\Shared\BaseRequest;
 use HelthjemSDK\Shared\Exceptions\HelthjemAuthenticationException;
 use HelthjemSDK\Shared\Interfaces\Configuration;
@@ -18,12 +18,12 @@ class SingleAddressCheckRequest extends BaseRequest
     protected $body = null;
 
     /**
-     * @param AuthTokenResponse $token
+     * @param AuthToken $token
      * @param Configuration $configuration
      * @param $address
      * @throws HelthjemAuthenticationException
      */
-    public function __construct(AuthTokenResponse $token, Configuration $configuration, Address $address)
+    public function __construct(AuthToken $token, Configuration $configuration, Address $address)
     {
         $this->uri = $this->getBaseUri($configuration->isProduction()) . 'addressCheck/single/v-1/find';
         $this->headers = array_merge($this->headers, $token->toHeader());

@@ -3,9 +3,9 @@
 namespace HelthjemSDK\Authentication;
 
 use HelthjemSDK\Shared\BaseRequest;
-use HelthjemSDK\Shared\Exceptions\HelthjemApiRequestException;
 use HelthjemSDK\Shared\Interfaces\Configuration;
 use Carbon\Carbon;
+use UnexpectedValueException;
 
 class AuthTokenRequest extends BaseRequest
 {
@@ -16,17 +16,17 @@ class AuthTokenRequest extends BaseRequest
         'Content-Type' => 'application/json'
     ];
     protected $body = null;
-    public $validUntil;
+    protected $validUntil;
 
     /**
      * @param Configuration $configuration
      * @param string $lifeTimeInMinutes
-     * @throws HelthjemApiRequestException
+     * @throws UnexpectedValueException
      */
     public function __construct(Configuration $configuration, $lifeTimeInMinutes = '1440')
     {
         if (!is_int((int) $lifeTimeInMinutes) || (int) $lifeTimeInMinutes > 1440 || (int) $lifeTimeInMinutes < 1) {
-            throw new HelthjemApiRequestException('Tokens an must have a lifetime between 1 - 1440');
+            throw new UnexpectedValueException('Tokens an must have a lifetime between 1 - 1440');
         }
 
         $this->validUntil = Carbon::now()->addMinutes($lifeTimeInMinutes);
@@ -43,5 +43,10 @@ class AuthTokenRequest extends BaseRequest
             $this->headers,
             $this->body
         );
+    }
+
+    public function getValidUntil()
+    {
+        return $this->validUntil;
     }
 }

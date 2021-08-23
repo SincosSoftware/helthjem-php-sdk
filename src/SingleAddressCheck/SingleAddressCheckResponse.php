@@ -2,6 +2,7 @@
 
 namespace HelthjemSDK\SingleAddressCheck;
 
+use HelthjemSDK\Shared\Exceptions\HelthjemApiResponseException;
 use HelthjemSDK\Shared\Traits\NonNullValueObject;
 
 class SingleAddressCheckResponse
@@ -24,8 +25,17 @@ class SingleAddressCheckResponse
     protected $routingDescription;
     protected $plannedDeparture;
 
+    /**
+     * SingleAddressCheckResponse constructor.
+     * @param array $data
+     * @throws HelthjemApiResponseException
+     */
     public function __construct(array $data)
     {
         $this->fill($data);
+
+        if (!$this->productName) {
+            throw new HelthjemApiResponseException('Unable to retrieve helthjem product');
+        }
     }
 }

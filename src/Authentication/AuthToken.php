@@ -4,19 +4,24 @@ namespace HelthjemSDK\Authentication;
 
 use Carbon\Carbon;
 use HelthjemSDK\Shared\Exceptions\HelthjemAuthenticationException;
-use HelthjemSDK\Shared\Traits\NonNullValueObject;
 
-class AuthTokenResponse
+class AuthToken
 {
-    use NonNullValueObject;
-
     private $token;
-    public $validUntil;
+    private $validUntil;
 
     public function __construct($token, Carbon $validUntil)
     {
         $this->token = $token;
         $this->validUntil = $validUntil;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValid()
+    {
+        return !$this->validUntil->isPast();
     }
 
     /**
@@ -38,8 +43,4 @@ class AuthTokenResponse
         return 'Bearer ' . $this->token;
     }
 
-    protected function isValid()
-    {
-        return !$this->validUntil->isPast();
-    }
 }

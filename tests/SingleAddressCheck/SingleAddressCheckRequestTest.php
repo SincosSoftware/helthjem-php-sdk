@@ -3,7 +3,7 @@
 namespace Tests\SingleAddressCheck;
 
 use Carbon\Carbon;
-use HelthjemSDK\Authentication\AuthTokenResponse;
+use HelthjemSDK\Authentication\AuthToken;
 use HelthjemSDK\NearbyServicepoint\NearbyServicepointRequest;
 use HelthjemSDK\Shared\Address;
 use HelthjemSDK\Shared\Interfaces\Configuration;
@@ -50,7 +50,7 @@ final class SingleAddressCheckRequestTest extends TestCase
 
     private function createAuthTokenResponse()
     {
-        $this->authTokenResponse = new AuthTokenResponse('test', Carbon::now()->addMinutes(1337));
+        $this->authTokenResponse = new AuthToken('test', Carbon::now()->addMinutes(1337));
     }
 
     public function testCorrectHeadersAreSet()

@@ -2,7 +2,7 @@
 
 namespace HelthjemSDK\NearbyServicepoint;
 
-use HelthjemSDK\Authentication\AuthTokenResponse;
+use HelthjemSDK\Authentication\AuthToken;
 use HelthjemSDK\Shared\Interfaces\Address;
 use HelthjemSDK\Shared\BaseRequest;
 use HelthjemSDK\Shared\Exceptions\HelthjemAuthenticationException;
@@ -20,12 +20,12 @@ class NearbyServicepointRequest extends BaseRequest
 
     /**
      * NearbyServicepointRequest constructor.
-     * @param AuthTokenResponse $token
+     * @param AuthToken $token
      * @param Configuration $configuration
      * @param Address $address
      * @throws HelthjemAuthenticationException
      */
-    public function __construct(AuthTokenResponse $token, Configuration $configuration, Address $address)
+    public function __construct(AuthToken $token, Configuration $configuration, Address $address)
     {
         $this->uri = $this->getBaseUri($configuration->isProduction()) . 'freightcoverage/v-1/servicepoints';
         $this->headers = array_merge($this->headers, $token->toHeader());
