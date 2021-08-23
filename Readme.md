@@ -1,30 +1,36 @@
 Helthjem PHP SDK
 
-A barebones php implementation of some of Helthjems's API's.
+A simple PHP implementation of some Helthjem API's.
+
+Supported endpoints:
+- Authentication V3 (https://jira-di.atlassian.net/wiki/spaces/DIPUB/pages/1501069392/LoginV3)
+- SingleAddressCheck (https://jira-di.atlassian.net/wiki/spaces/DIPUB/pages/90639259/Parcel+Single+Address+Check+API)
+- NearbyServicePoints (https://jira-di.atlassian.net/wiki/spaces/DIPUB/pages/1413251073/Parcel+Nearby+Servicepoint+API)
+
 
 Usage example: 
 
-    $configuration = new Configuration();
-    
-    $requestHandler = new RequestHandler(
-        new GuzzleClient([GuzzleHttp\RequestOptions::CONNECT_TIMEOUT => 2.0])
-    );
-    
-    $token = $requestHandler->send(
-        new AuthTokenRequest($configuration)
+    $client = new HelthjemSDK\Shared\RequestHandler(
+        new Client([GuzzleHttp\RequestOptions::CONNECT_TIMEOUT => 1.0])
     );
 
-    $address = Address::fromArray([
+    // some implementation of HelthjemSDK\Shared\Interfaces\Configuration
+    $configuration = new Configuration();
+
+    $address = HelthjemSDK\Shared\Address::fromArray([
         "countryCode" => 'NO',
-        "postalName" => 'Oslo',
+        "city" => 'Oslo',
         "zipCode" => '0468',
         "streetAddress" => 'Moldegata 5'
     ]);
 
-    $singleAddressCheckRequest = new SingleAddressCheckRequest($token, $configuration, $address);
-    $nearbyServicePointRequest = new NearbyServicepointRequest($token, $configuration, $address);
+    $authTokenRequest = new HelthjemSDK\Authentication\AuthTokenRequest($configuration);
+    $token = $client->send($authTokenRequest);
 
-    $singleAddressCheck = $requestHandler->send($singleAddressCheckRequest);
-    $nearbyServicePoint = $requestHandler->send($nearbyServicePointRequest);
-    
+    $singleAddressCheckRequest = new HelthjemSDK\SingleAddressCheck\SingleAddressCheckRequest($token, $configuration, $address);
+    $singleAddressCheck = $client->send($singleAddressCheckRequest);
+
+    $nearbyServicePointRequest = new HelthjemSDK\NearbyServicepoint\NearbyServicepointRequest($token, $configuration, $address);
+    $nearbyServicePoints = $client->send($nearbyServicePointRequest);
+
 Created by 24nettbutikk.no
