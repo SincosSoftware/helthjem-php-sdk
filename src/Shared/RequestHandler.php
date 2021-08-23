@@ -5,7 +5,6 @@ namespace HelthjemSDK\Shared;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use HelthjemSDK\Shared\Exceptions\HelthjemApiResponseException;
-use Psr\Http\Message\RequestInterface;
 use HelthjemSDK\Authentication\AuthToken;
 use HelthjemSDK\NearbyServicepoint\NearbyServicepointResponse;
 use HelthjemSDK\SingleAddressCheck\SingleAddressCheckResponse;
@@ -23,12 +22,12 @@ class RequestHandler
     }
 
     /**
-     * @param RequestInterface $request
+     * @param BaseRequest $request
      * @return AuthToken|NearbyServicepointResponse|SingleAddressCheckResponse
      * @throws Exceptions\HelthjemApiResponseException
      * @throws HelthjemApiResponseException
      */
-    public function send(RequestInterface $request)
+    public function send(BaseRequest $request)
     {
         $this->requestType = get_class($request);
 

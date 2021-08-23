@@ -36,6 +36,7 @@ class ResponseHandler
 
         switch (get_class($request)) {
             case AuthTokenRequest::class:
+                /** @var AuthTokenRequest $request */
                 $this->response = new AuthToken($responseBody['token'], $request->getValidUntil());
                 break;
             case SingleAddressCheckRequest::class:
