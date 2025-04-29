@@ -6,8 +6,8 @@ use GuzzleHttp\Psr7\Request as GuzzleRequest;
 
 abstract class BaseRequest extends GuzzleRequest
 {
-    const STAGING_BASE_URI = 'https://staging-ws.di.no/ws/json/';
-    const PRODUCTION_BASE_URI = 'https://ws.di.no/ws/json/';
+    const STAGING_BASE_URI = 'https://api.helthjem.no/';
+    const PRODUCTION_BASE_URI = 'https://api.pre.helthjem.no/';
 
     public function getBaseUri($isProduction = false)
     {

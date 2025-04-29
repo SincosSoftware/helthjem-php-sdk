@@ -25,7 +25,7 @@ class SingleAddressCheckRequest extends BaseRequest
      */
     public function __construct(AuthToken $token, Configuration $configuration, Address $address)
     {
-        $this->uri = $this->getBaseUri($configuration->isProduction()) . 'addressCheck/single/v-1/find';
+        $this->uri = $this->getBaseUri($configuration->isProduction()) . 'parcels/v1/addresses/find/single';
         $this->headers = array_merge($this->headers, $token->toHeader());
 
         $this->body = json_encode([

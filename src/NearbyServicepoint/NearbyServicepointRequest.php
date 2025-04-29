@@ -27,7 +27,7 @@ class NearbyServicepointRequest extends BaseRequest
      */
     public function __construct(AuthToken $token, Configuration $configuration, Address $address)
     {
-        $this->uri = $this->getBaseUri($configuration->isProduction()) . 'freightcoverage/v-1/servicepoints';
+        $this->uri = $this->getBaseUri($configuration->isProduction()) . 'parcels/v1/service-points/nearby';
         $this->headers = array_merge($this->headers, $token->toHeader());
 
         $this->body = json_encode([
