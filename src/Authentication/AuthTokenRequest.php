@@ -30,11 +30,12 @@ class AuthTokenRequest extends BaseRequest
         }
 
         $this->validUntil = Carbon::now()->addMinutes($lifeTimeInMinutes);
-        $this->uri = $this->getBaseUri($configuration->isProduction()) . 'auth/v-3/login/'. $lifeTimeInMinutes;
+        $this->uri = $this->getBaseUri($configuration->isProduction()) . 'auth/oauth2/v1/token';
 
         $this->body = json_encode([
-            'username' => $configuration->getUserName(),
-            'password' => $configuration->getPassword()
+            'client_id' => $configuration->getUserName(),
+            'client_secret' => $configuration->getPassword(),
+            'grant_type' => 'client_credentials',
         ]);
 
         parent::__construct(
